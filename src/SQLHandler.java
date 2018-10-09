@@ -22,14 +22,13 @@ public class SQLHandler {
 
 	/** The name of the database we are testing with (this default is installed with MySQL) */
 	private final String dbName = "Assignment1";
-	
-	/** The name of the table we are testing with */
-	private final String tableName = "Employees";
-	
-	
+		
+	//ArrayList of all the columns data
 	private ArrayList<String> nameArr, deptArr, managerArr, locationArr, employee;
 	private ArrayList<Integer> idArr, manIdArr;
-		
+	
+	/**make a connection to the mysql database table
+	**/
 	public Connection getConnection() throws SQLException {
 		Connection conn = null;
 		Properties connectionProps = new Properties();
@@ -44,6 +43,10 @@ public class SQLHandler {
 	}
 	
 	
+	/**
+	 * query all the data of the table and save them into their respective arraylists
+	 * @param con
+	 */
 	public void getAll(Connection con)
 	{
 		String query = "SELECT * FROM Employees";
@@ -59,8 +62,9 @@ public class SQLHandler {
 		try
 		{
 			st = con.createStatement();
-			ResultSet result = st.executeQuery(query);
+			ResultSet result = st.executeQuery(query); //create a result set of the query
 			
+			//for each result - add data to arraylists
 			while(result.next())
 			{
 				idArr.add(result.getInt(1));
@@ -79,6 +83,12 @@ public class SQLHandler {
 		
 	}
 	
+	/**
+	 * Get a single employee data from the table - uses the id that user clicked
+	 * @param con
+	 * @param id
+	 * @throws SQLException
+	 */
 	public void getEmployee(Connection con, String id) throws SQLException
 	{
 		employee = new ArrayList<>();
@@ -91,7 +101,7 @@ public class SQLHandler {
 			while(res.next())
 			{
 				
-////				System.out.println(res.getString(6));
+				//add each column data into the array as their own indexes.
 				for (int i = 1; i < 7; i++)
 				{
 					employee.add(res.getString(i));
@@ -109,6 +119,18 @@ public class SQLHandler {
 		}
 	}
 	
+	/**
+	 * Edits the database table entry and updates with the parameters passed
+	 * @param con
+	 * @param oldId
+	 * @param newId
+	 * @param name
+	 * @param department
+	 * @param manager
+	 * @param manId
+	 * @param location
+	 * @throws SQLException
+	 */
 	public void alterEntry(Connection con, String oldId, String newId, String name, String department, String manager, String manId, String location) throws SQLException
 	{
 		String change = "UPDATE Employees SET ID = '" + newId +"' , Name = '"  + name + "' , Department = '" + department +  "' , Manager = '"+ manager + "' , ManagerID = '" + manId + "' , Location = " + "'" + location + "' WHERE ID = " + oldId;
@@ -129,6 +151,17 @@ public class SQLHandler {
 		
 	}
 	
+	/**
+	 * Adds a new entry to the database table using the parameters as the values.
+	 * @param con
+	 * @param id
+	 * @param name
+	 * @param department
+	 * @param manager
+	 * @param manId
+	 * @param location
+	 * @throws SQLException
+	 */
 	public void addEntry(Connection con, String id, String name, String department, String manager, String manId, String location) throws SQLException
 	{
 		String insert = "INSERT INTO Employees " + "VALUES (" +
@@ -149,10 +182,15 @@ public class SQLHandler {
 		}
 	}
 	
+	/**
+	 * Deletes entry from database using the ID.
+	 * @param con
+	 * @param id
+	 * @throws SQLException
+	 */
 	public void delete(Connection con, String id) throws SQLException
 	{
 		String delete = "DELETE FROM Employees WHERE ID = " + id;
-		System.out.println(delete);
 		Statement st = null;
 		try
 		{
@@ -168,37 +206,65 @@ public class SQLHandler {
 		}
 	}
 	
-	
+	//Accessors and Mutators of the arraylists
+	/**
+	 * 
+	 * @return ArrayList of names
+	 */
 	public ArrayList<String> getNameList()
 	{
 		return nameArr;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of IDs
+	 */
 	public ArrayList<Integer> getIdList()
 	{
 		return idArr;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of Departments
+	 */
 	public ArrayList<String> getDepartmentList()
 	{
 		return deptArr;
 	}
 
+	/**
+	 * 
+	 * @return ArrayList of Manager Names
+	 */
 	public ArrayList<String> getManagerList()
 	{
 		return managerArr;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of ManagerID
+	 */
 	public ArrayList<Integer> getManagerIDList()
 	{
 		return manIdArr;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of Locations
+	 */
 	public ArrayList<String> getLocationList()
 	{
 		return locationArr;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of single Employee
+	 */
 	public ArrayList<String> getEmployeeList()
 	{
 		return employee;
