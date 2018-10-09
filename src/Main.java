@@ -11,7 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-
+/**
+ * @author fritz
+ *
+ */
 public class Main {
 	private JFrame mainFrame, addFrame, showFrame, editFrame;
 	private static SQLHandler sqlCtrl;
