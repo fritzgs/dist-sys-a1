@@ -42,7 +42,24 @@ public class SQLHandler {
 		return conn;
 	}
 	
-	
+	public int getID(Connection con)
+	{
+		String query = "SELECT MAX(ID) FROM Employees";
+		Statement st = null;
+		int id = 0;
+		try
+		{
+			st = con.createStatement();
+			ResultSet result = st.executeQuery(query); //create a result set of the query
+			result.next();
+			id = result.getInt(1) + 1;	
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
 	/**
 	 * query all the data of the table and save them into their respective arraylists
 	 * @param con

@@ -154,8 +154,9 @@ public class Main {
 	/**
 	 * Creates text fields for values to add to db table.
 	 * The field variables are stored globally to be accessed later when the save button is clicked.
+	 * @throws SQLException 
 	 */
-	private void addNew()
+	private void addNew() throws SQLException
 	{
 		addFrame = new JFrame("Add New Employee");
 		addFrame.setVisible(true);
@@ -181,6 +182,7 @@ public class Main {
 		JLabel idTitle = new JLabel("ID");
 		idTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		idField = new JTextField();
+		idField.setText(String.valueOf(sqlCtrl.getID(sqlCtrl.getConnection()))); //set the id as the last id + 1
 		
 		//name field 
 		JLabel nameTitle = new JLabel("Name");
@@ -383,7 +385,12 @@ public class Main {
 			else if(command.equals("Add"))
 			{
 				mainFrame.dispose(); 	//gets rid of the main window
-				addNew(); 				//displays the add employee window
+				try {
+					addNew(); //displays the add employee window
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
 
 			}
 			
@@ -441,7 +448,12 @@ public class Main {
 				}
 				
 				addFrame.dispose(); //close current the add window 
-				addNew(); //go back to add window
+				try {
+					addNew(); //go back to add window
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 			//opens edit window of employee selected by ID.
