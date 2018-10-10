@@ -42,6 +42,11 @@ public class SQLHandler {
 		return conn;
 	}
 	
+	/**
+	 * get the id of the last entry in the database table
+	 * @param con
+	 * @return int id 
+	 */
 	public int getID(Connection con)
 	{
 		String query = "SELECT MAX(ID) FROM Employees";
@@ -52,7 +57,7 @@ public class SQLHandler {
 			st = con.createStatement();
 			ResultSet result = st.executeQuery(query); //create a result set of the query
 			result.next();
-			id = result.getInt(1) + 1;	
+			id = result.getInt(1);	
 		}
 		catch (Exception e)
 		{

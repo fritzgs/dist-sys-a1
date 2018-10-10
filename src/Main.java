@@ -182,7 +182,7 @@ public class Main {
 		JLabel idTitle = new JLabel("ID");
 		idTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		idField = new JTextField();
-		idField.setText(String.valueOf(sqlCtrl.getID(sqlCtrl.getConnection()))); //set the id as the last id + 1
+		idField.setText(String.valueOf(sqlCtrl.getID(sqlCtrl.getConnection()) + 1)); //set the id as the last id + 1
 		
 		//name field 
 		JLabel nameTitle = new JLabel("Name");
