@@ -251,7 +251,7 @@ public class Main {
 		
 		//back button for this window
 		JButton backEmp = new JButton("Back to Employee List");
-		backEmp.setActionCommand("Show");
+		backEmp.setActionCommand("empBack");
 		backEmp.addActionListener(new ButtonClickListener());
 		
 		//save button
@@ -375,6 +375,17 @@ public class Main {
 				mainFrame();		//display the main window
 			}
 			
+			else if(command.equals("empBack"))
+			{
+				editFrame.dispose();
+				try {
+					showAll();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
 			//saves the values into the database table
 			else if (command.equals("Save"))
 			{			
@@ -462,6 +473,7 @@ public class Main {
 						//warn if no
 						fail = new JOptionPane();
 						fail.showMessageDialog(editFrame, "Canceled Delete", "Canceled" , JOptionPane.INFORMATION_MESSAGE);
+					
 					}
 					
 				} catch (SQLException e1) {
