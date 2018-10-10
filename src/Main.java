@@ -132,7 +132,17 @@ public class Main {
 			
 			empPanel.add(new JLabel(sqlCtrl.getNameList().get(i))); //name of employee
 			empPanel.add(new JLabel(sqlCtrl.getDepartmentList().get(i))); //department employee is in
-			empPanel.add(new JLabel(sqlCtrl.getManagerList().get(i))); //manager of employee
+			
+			//if the employee does not have a manager - it will show NA.
+			if(sqlCtrl.getManagerList().get(i) == null)
+			{
+				empPanel.add(new JLabel("NA")); //manager of employee
+			}
+			else
+			{
+				empPanel.add(new JLabel(sqlCtrl.getManagerList().get(i))); //manager of employee
+			}
+			
 			empPanel.add(new JLabel(sqlCtrl.getManagerIDList().get(i).toString())); //manager id 
 			empPanel.add(new JLabel(sqlCtrl.getLocationList().get(i))); //location of employee based
 		}
@@ -164,7 +174,7 @@ public class Main {
 		saveBtn.addActionListener(new ButtonClickListener());
 		
 		//blank placeholder
-		JLabel title = new JLabel("");
+		JLabel title = new JLabel("Add Details Below");
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		//ID field 
@@ -222,7 +232,7 @@ public class Main {
 		editPanel.add(locationTitle);
 		editPanel.add(locationField);
 		
-		editPanel.add(new JLabel());
+		editPanel.add(clearBtn());
 		editPanel.add(saveBtn);
 		
 		addFrame.add(editPanel);
@@ -325,11 +335,25 @@ public class Main {
 		editPanel.add(locationTitle);
 		editPanel.add(locationField);
 		
-		editPanel.add(new JLabel());
+		editPanel.add(clearBtn());
+		
 		editPanel.add(saveBtn);
 		
 		editFrame.add(editPanel);
 		
+	}
+	
+	/**
+	 * The clear button for edit and add - Sets all the fields to a blank string.
+	 * @return JButton
+	 */
+	private JButton clearBtn()
+	{
+		JButton clearBtn = new JButton("Clear");
+		clearBtn.setActionCommand("clear");
+		clearBtn.addActionListener(new ButtonClickListener());
+		clearBtn.setHorizontalAlignment(SwingConstants.CENTER);
+		return clearBtn;
 	}
 	
 	/**
@@ -455,6 +479,17 @@ public class Main {
 				}
 			}
 			
+			//sets all the fields to blank string
+			else if(command.equals("clear"))
+			{
+				idField.setText("");
+				nameField.setText("");
+				deptField.setText("");
+				managerField.setText("");
+				managerIdField.setText("");
+				locationField.setText("");
+			}
+			
 			//deletes an employee
 			else if (command.equals("delete"))
 			{
@@ -466,6 +501,9 @@ public class Main {
 					{
 						//run delete using the ID
 						sqlCtrl.delete(sqlCtrl.getConnection(), empId);
+						editFrame.dispose();
+						JOptionPane success = new JOptionPane("Successfully Deleted");
+						success.showMessageDialog(addFrame, "Successfully Deleted Employee" , "Success", JOptionPane.NO_OPTION);
 						showAll(); //display the employee list after
 					}
 					else
