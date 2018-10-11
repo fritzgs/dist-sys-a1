@@ -277,6 +277,17 @@ public class Main {
 		delete.addActionListener(new ButtonClickListener());
 		delete.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		//next button
+		JButton next = new JButton("Next");
+		next.setActionCommand("next");
+		next.addActionListener(new ButtonClickListener());
+		next.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		//previous button
+		JButton previous = new JButton("Previous");
+		previous.setActionCommand("previous");
+		previous.addActionListener(new ButtonClickListener());
+		previous.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		//selected employee data is stored in an arraylist and is accessed by index.
 		//ID
@@ -318,6 +329,9 @@ public class Main {
 		
 		editPanel.add(backEmp);
 		editPanel.add(delete);
+		
+		editPanel.add(previous);
+		editPanel.add(next);
 		
 		editPanel.add(idTitle);
 		editPanel.add(idField);
@@ -500,6 +514,50 @@ public class Main {
 				managerField.setText("");
 				managerIdField.setText("");
 				locationField.setText("");
+			}
+			
+			else if(command.equals("next"))
+			{
+				int nextId = Integer.parseInt(idField.getText()) + 1;
+				try {
+					if(nextId > sqlCtrl.getID(sqlCtrl.getConnection()))
+					{
+						//do error pop up dialog
+						fail = new JOptionPane();
+						fail.showMessageDialog(editFrame, "This is the last entry", "Message" , JOptionPane.INFORMATION_MESSAGE);
+					}
+					else
+					{
+						editFrame.dispose();
+						edit(String.valueOf(nextId));
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			
+			else if(command.equals("previous"))
+			{
+				int prevId = Integer.parseInt(idField.getText()) - 1;
+				try
+				{
+					if(prevId < 1)
+					{
+						fail = new JOptionPane();
+						fail.showMessageDialog(editFrame, "This is the first entry", "Message" , JOptionPane.INFORMATION_MESSAGE);
+					}
+					else
+					{
+						editFrame.dispose();
+						edit(String.valueOf(prevId));
+					}
+				}
+				catch (SQLException e1)
+				{
+					e1.printStackTrace();
+				}
 			}
 			
 			//deletes an employee
