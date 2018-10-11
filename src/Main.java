@@ -20,9 +20,10 @@ public class Main {
 	private static SQLHandler sqlCtrl;
 	private String empId; 
 	private JTextField idField, nameField, deptField, managerField, managerIdField, locationField;
-		
+	private int currentId;
 	private JButton showBack, addBack;
-	JOptionPane fail;
+	private JLabel idFieldAsLabel;
+	private JOptionPane fail;
 	
 	public static void main(String[] args)
 	{
@@ -181,8 +182,10 @@ public class Main {
 		//ID field 
 		JLabel idTitle = new JLabel("ID");
 		idTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		idField = new JTextField();
-		idField.setText(String.valueOf(sqlCtrl.getID(sqlCtrl.getConnection()) + 1)); //set the id as the last id + 1
+		idFieldAsLabel = new JLabel(String.valueOf(sqlCtrl.getID(sqlCtrl.getConnection()) + 1));
+		idFieldAsLabel.setText(String.valueOf(sqlCtrl.getID(sqlCtrl.getConnection()) + 1)); //set the id as the last id + 1
+		idFieldAsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		idField = new JTextField("");
 		
 		//name field 
 		JLabel nameTitle = new JLabel("Name");
@@ -217,7 +220,7 @@ public class Main {
 		editPanel.add(title);
 		
 		editPanel.add(idTitle);
-		editPanel.add(idField);
+		editPanel.add(idFieldAsLabel);
 		
 		editPanel.add(nameTitle);
 		editPanel.add(nameField);
@@ -482,6 +485,8 @@ public class Main {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+
 			}
 			
 			//if edit is clicked - it will use the new field contents to update the entry on the db table
@@ -503,12 +508,18 @@ public class Main {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			
 			}
 			
 			//sets all the fields to blank string
 			else if(command.equals("clear"))
 			{
-				idField.setText("");
+				if(!idField.getText().equals(""))
+				{
+					currentId = Integer.parseInt(idField.getText());
+					idField.setText("");
+				}
+				
 				nameField.setText("");
 				deptField.setText("");
 				managerField.setText("");
@@ -518,7 +529,16 @@ public class Main {
 			
 			else if(command.equals("next"))
 			{
-				int nextId = Integer.parseInt(idField.getText()) + 1;
+				int nextId = 0;
+				if(idField.getText().equals(""))
+				{
+					nextId = currentId + 1;
+				}
+				else
+				{
+					nextId = Integer.parseInt(idField.getText()) + 1;
+				}
+				
 				try {
 					if(nextId > sqlCtrl.getID(sqlCtrl.getConnection()))
 					{
@@ -538,9 +558,20 @@ public class Main {
 				
 			}
 			
+			//goes to the previous entry before the current.
 			else if(command.equals("previous"))
 			{
-				int prevId = Integer.parseInt(idField.getText()) - 1;
+				//checks if the clear button has cleared the id
+				int prevId = 0;
+				if(idField.getText().equals("")) //if cleared - use the currentId set by the clear button
+				{
+					prevId = currentId - 1; 
+				}
+				else
+				{
+					prevId = Integer.parseInt(idField.getText()) - 1; //else stay use the idField -1.
+				}
+				
 				try
 				{
 					if(prevId < 1)
@@ -550,8 +581,8 @@ public class Main {
 					}
 					else
 					{
-						editFrame.dispose();
-						edit(String.valueOf(prevId));
+						editFrame.dispose(); //dispose current entry 
+						edit(String.valueOf(prevId)); //open the previous entry of this.
 					}
 				}
 				catch (SQLException e1)

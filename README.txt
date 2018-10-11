@@ -20,4 +20,7 @@ Add New Employee:
 Allows user to add new employee to the list
 All fields must have an input.
 
+Error:
+When a user is deleted, the next button before that user and the previous button after that user will trigger an error as the ids are taken by current ID +/- 1
+
 
